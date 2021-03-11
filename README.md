@@ -15,6 +15,6 @@ Install Processing if you haven't already and run the program as any other Proce
 
 You can also download the prebuilt binaries located in releases.
 
-## Experiment on your won
+## Experiment on your own
 
 If you run the code with the Processing environnement, you can modify the shader to change the color and other attributes of the sponge.
