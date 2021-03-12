@@ -11,6 +11,8 @@ uniform vec3 cam_position;
 uniform mat4 cam_direction;
 uniform vec3 light_direction;
 
+uniform float screen_ratio;
+
 in vec4 vertColor;
 in vec3 vertNormal;
 in vec3 vertLightDir;
@@ -119,7 +121,7 @@ vec3 normal(vec3 p){
 void main() {
     vec3 color = vec3(0);
 
-    vec2 uv = vertTexCoord.st*2.-1.;
+    vec2 uv = vertTexCoord.st*2.-vec2(screen_ratio, 1);
     uv.y *= -1;
     vec3 ro = cam_position;
     vec3 rd = (cam_direction * vec4(normalize(vec3(uv.xy, 3)), 1)).xyz;

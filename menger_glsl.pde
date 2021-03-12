@@ -1,5 +1,5 @@
 PShader fract;
-PShader fxaa;
+//PShader fxaa;
 
 PVector cam_position;
 PMatrix3D cam_rotation;
@@ -16,11 +16,15 @@ float light_rotY = -PI*.35;
 int iterations = 5;
 
 void setup() {
-  size(1000, 1000, P3D);
+  //size(1920, 1080, P3D);
+  size(1300, 1000, P3D);
+  //fullScreen(P3D);
   noStroke();
   fill(204);
   fract = loadShader("frag.glsl", "vert.glsl");
-  fxaa = loadShader("aliasfrag.glsl", "aliasvert.glsl");
+  //fxaa = loadShader("aliasfrag.glsl", "aliasvert.glsl");
+  
+  fract.set("screen_ratio", (float)width/height);
   
   cam_position = new PVector(0, 0, -8);
   cam_rotation = new PMatrix3D();
