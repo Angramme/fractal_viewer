@@ -24,6 +24,7 @@ out vec4 fragColor;
 #define MIN_DIST .00001
 #define MAX_DIST 500
 #define EPS .00002
+#define REFLETION_BOUNCES 2
 
 float sdBox( vec3 p, vec3 b )
 {
@@ -131,23 +132,34 @@ void main() {
     vec3 SUN = light_direction;
     const vec3 SUN_COL = vec3(1, .8, .8);
 
-    MData mp = march(ro, rd);
-    vec3 P = ro + rd * mp.D;
-    //vec3 N = mp.N; 
-    vec3 N = normal(P);
-    float sh = softshadow2(P + (MIN_DIST*3.)*N, SUN, 0., 50., 6.);
-    
-    float diffuse = max(0, dot(N, SUN));
-    float specular = pow(clamp(dot(reflect(-SUN, N), -rd), 0, 1), 8.);
+    vec3 color_accumulator = vec3(1);
+    for(int B=0; B<REFLETION_BOUNCES; B++){
+        MData mp = march(ro, rd);
+        vec3 P = ro + rd * mp.D;
+        //vec3 N = mp.N; 
+        vec3 N = normal(P);
+        float sh = softshadow2(P + (MIN_DIST*3.)*N, SUN, 0., 50., 6.);
+        
+        float diffuse = max(0, dot(N, SUN));
+        float specular = pow(clamp(dot(reflect(-SUN, N), -rd), 0, 1), 8.);
 
-    if(mp.D < MAX_DIST){
-        // const vec3 COL = vec3(1, .5, .5);
-        //const vec3 COL = vec3(.5, .5, 1);
-        const vec3 COL = vec3(.5, 1., .5);
-        color.rgb = (diffuse+specular)*COL*SUN_COL*sh;
-    }else{
-        color.rgb += vec3(.3, .3, .5);
-        color.rgb += exp(1.-mp.mn*3.)*vec3(1, .5+.5*sin(time), 1)*.4;
+        if(mp.D < MAX_DIST){
+            // const vec3 COL = vec3(1, .5, .5);
+            //const vec3 COL = vec3(.5, .5, 1);
+            const vec3 COL = vec3(.5, 1., .5);
+            color.rgb += color_accumulator*
+                (diffuse+specular)*COL*SUN_COL*sh;
+            color_accumulator *= COL*
+                mix(.2, .65, 1.-max(0., dot(-rd, N)));
+            ro = P+N*(EPS*3);
+            rd = reflect(rd, N);
+        }else{
+            color.rgb += color_accumulator*
+                vec3(.3, .3, .5);
+            color.rgb += color_accumulator*
+                exp(1.-mp.mn*3.)*vec3(1, .5+.5*sin(time), 1)*.4;
+            break;
+        }
     }
 
     fragColor = vec4(color, 1);
