@@ -29,6 +29,7 @@ float truc(float x, float t, float s){
     // vec3 N = round(p/s*(1.001));
     
     return vec4(
-        (sdBox(p, vec3(s*.48))-s*.02)/1.5, //distance
+        // (sdBox(p, vec3(s*.48))-s*.02)/1.5, //distance
+        (sdBox(p, vec3(s)))/1.5, //distance
         vec3(.5, 1, .5)); //color
 }
