@@ -1,6 +1,6 @@
 PShader fract;
 //PShader fxaa;
-String current_fractal;
+int current_fractal;
 String[] all_fractals;
 
 PVector cam_position;
@@ -16,7 +16,7 @@ float light_rotX = PI*.35;
 float light_rotY = -PI*.35;
 
 int iterations = 5;
-int reflection_bounces = 1;
+int reflection_bounces = 2;
 
 void setup() {
   //size(1920, 1080, P3D);
@@ -27,7 +27,7 @@ void setup() {
   //fxaa = loadShader("aliasfrag.glsl", "aliasvert.glsl");
   // fract = loadShader("frag.glsl", "vert.glsl");
   all_fractals = listFileNames(sketchPath()+"/fractals/");
-  current_fractal = all_fractals[0];
+  current_fractal = 0;
   reloadShaders();
     
   cam_position = new PVector(0, 0, -8);
@@ -38,7 +38,7 @@ void setup() {
 void reloadShaders(){
   fract = new PShader(this,
     load_vertex_shader(),
-    load_fragment_shader(current_fractal)
+    load_fragment_shader(all_fractals[current_fractal])
   );
   fract.set("screen_ratio", (float)width/height);
 }
@@ -65,11 +65,17 @@ void mouseWheel(MouseEvent event) {
   }
 }
 void keyPressed(){
-  if(keyCode == 'S' || keyCode=='s')
+  if(keyCode == 'S' || keyCode=='s'){
     reloadShaders();
-  else if(keyCode == 'C' || keyCode=='c')
+  }else if(keyCode == 'C' || keyCode=='c'){
     print("taking screenshot");
     saveFrame("screenshots/screen-"+random(1000000000000L)+".png");
+  }else if(keyCode == RIGHT || keyCode == LEFT){
+    current_fractal += keyCode == RIGHT ? 1 : -1;
+    if(current_fractal < 0) current_fractal += all_fractals.length;
+    current_fractal %= all_fractals.length;
+    reloadShaders();
+  }
 }
 
 void draw() {
