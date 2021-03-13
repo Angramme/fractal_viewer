@@ -1,5 +1,6 @@
 PShader fract;
 //PShader fxaa;
+String current_fractal;
 
 PVector cam_position;
 PMatrix3D cam_rotation;
@@ -14,6 +15,7 @@ float light_rotX = PI*.35;
 float light_rotY = -PI*.35;
 
 int iterations = 5;
+int reflection_bounces = 1;
 
 void setup() {
   //size(1920, 1080, P3D);
@@ -21,14 +23,22 @@ void setup() {
   //fullScreen(P3D);
   noStroke();
   fill(204);
-  fract = loadShader("frag.glsl", "vert.glsl");
   //fxaa = loadShader("aliasfrag.glsl", "aliasvert.glsl");
-  
-  fract.set("screen_ratio", (float)width/height);
-  
+  // fract = loadShader("frag.glsl", "vert.glsl");
+  current_fractal = "menger_sponge.glsl";
+  reloadShaders();
+    
   cam_position = new PVector(0, 0, -8);
   cam_rotation = new PMatrix3D();
   cam_rotation.reset();
+}
+
+void reloadShaders(){
+  fract = new PShader(this,
+    load_vertex_shader(),
+    load_fragment_shader(current_fractal)
+  );
+  fract.set("screen_ratio", (float)width/height);
 }
 
 void mouseDragged(){
@@ -46,9 +56,15 @@ void mouseDragged(){
 void mouseWheel(MouseEvent event) {
   if (keyPressed && (key == 'i' || key == 'I')){
     iterations += event.getCount();
+  }else if(keyPressed && (key == 'r' || key == 'R')){
+    reflection_bounces += event.getCount();
   }else{
     cam_distance *= pow(2., event.getCount());
   }
+}
+void keyPressed(){
+  if(keyCode == 'S' || keyCode=='s')
+    reloadShaders();
 }
 
 void draw() {
@@ -75,6 +91,7 @@ void draw() {
   
   //fract.set("iterations", 5+int(1/cam_distance));
   fract.set("iterations", iterations);
+  fract.set("reflection_bounces", reflection_bounces);
   fract.set("time", (float)millis()/1000.);
   
   shader(fract);

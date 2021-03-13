@@ -12,6 +12,7 @@ uniform mat4 cam_direction;
 uniform vec3 light_direction;
 
 uniform float screen_ratio;
+uniform int reflection_bounces;
 
 in vec4 vertColor;
 in vec3 vertNormal;
@@ -24,54 +25,26 @@ out vec4 fragColor;
 #define MIN_DIST .00001
 #define MAX_DIST 500
 #define EPS .00002
-#define REFLETION_BOUNCES 2
 
-float sdBox( vec3 p, vec3 b )
-{
-  vec3 q = abs(p) - b;
-  return length(max(q,0.0)) + min(max(q.x,max(q.y,q.z)),0.0);
-}
-
-float truc(float x, float t, float s){
-    if(abs(x) < s*.5 && abs(x) <= t) return 0;
-    return x > 0 ? s : -s;
-}
-vec4 IFS(vec3 p, int n){
-    p *= 1.5;
-    float s = 1.;
-
-    for(int i=0; i<n; i++){
-        vec3 ap = abs(p);
-        float mid = min(ap.x, min(ap.y, ap.z));
-        vec3 boxP = vec3(
-            truc(p.x, mid, s),
-            truc(p.y, mid, s),
-            truc(p.z, mid, s)
-        );
-        p = p-boxP;
-        s *= 0.33333333333333;
-    }
-    s *= 3;
-    vec3 N = round(p/s*(1.001));
-    
-    return vec4((sdBox(p, vec3(s*.48))-s*.02)/1.5, N);
-}
+//this is going to paste in the fractal distance function
+#fractalSDF_definition
 
 struct PData{
     float D;
-    vec3 N;
+    vec3 COL;
 };
 PData map(vec3 P){
-    //float sphere = distance(P, light_direction*3.)-.2;
-    vec4 menger = IFS(P, iterations);
-    //float platform = sdBox(P-vec3(0, -3, 0), vec3(3, .2, 3));
-    return PData(menger.x, menger.yzw);
+    // vec4 fractal = IFS(P, iterations);
+    vec4 fractal = #fractalSDF_name(P, iterations);
+
+
+    return PData(fractal.x, fractal.yzw);
 }
 
 struct MData{
     float D;
     float mn;
-    vec3 N;
+    vec3 COL;
 };
 MData march(vec3 O, vec3 D){
     float t = 0;
@@ -84,7 +57,7 @@ MData march(vec3 O, vec3 D){
         if(t > MAX_DIST) break;
         if(d.D < MIN_DIST) break; 
     }
-    return MData(t, mn, d.N);
+    return MData(t, mn, d.COL);
 }
 
 float softshadow(in vec3 ro, in vec3 rd, float mint, float maxt, float k ){
@@ -133,7 +106,7 @@ void main() {
     const vec3 SUN_COL = vec3(1, .8, .8);
 
     vec3 color_accumulator = vec3(1);
-    for(int B=0; B<REFLETION_BOUNCES; B++){
+    for(int B=0; B<reflection_bounces; B++){
         MData mp = march(ro, rd);
         vec3 P = ro + rd * mp.D;
         //vec3 N = mp.N; 
@@ -146,10 +119,10 @@ void main() {
         if(mp.D < MAX_DIST){
             // const vec3 COL = vec3(1, .5, .5);
             //const vec3 COL = vec3(.5, .5, 1);
-            const vec3 COL = vec3(.5, 1., .5);
+            //const vec3 COL = vec3(.5, 1., .5);
             color.rgb += color_accumulator*
-                (diffuse+specular)*COL*SUN_COL*sh;
-            color_accumulator *= COL*
+                (diffuse+specular)*mp.COL*SUN_COL*sh;
+            color_accumulator *= mp.COL*
                 mix(.2, .65, 1.-max(0., dot(-rd, N)));
             ro = P+N*(EPS*3);
             rd = reflect(rd, N);
