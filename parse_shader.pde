@@ -1,13 +1,13 @@
 
 
 String[] load_vertex_shader(){
-    return loadStrings("vert.glsl");
+    return loadStrings(sketchPath()+"/vert.glsl");
 }
 String[] load_fragment_shader(String name){
     print("reloading shaders...");
     
-    String fractal = join(loadStrings("fractals/"+name), "\n");
-    String[] base = loadStrings("frag.glsl");
+    String fractal = join(loadStrings(sketchPath()+"/fractals/"+name), "\n");
+    String[] base = loadStrings(sketchPath()+"/frag.glsl");
     
     String fractalSDF_name = match(fractal, "#main\\s+\\S+\\s+([a-zA-Z0-9]+)")[1];
     fractal = process_fractal_functions(fractal);
@@ -29,9 +29,23 @@ String[] load_fragment_shader(String name){
         }
     }
 
+    print(join(out, '\n'));
+
     return out;
 }
 String process_fractal_functions(String original){
     // also add parameters etc
     return join(split(original, "#main"), "");
+}
+
+
+String[] listFileNames(String dir) {
+  File file = new File(dir);
+  if (file.isDirectory()) {
+    String names[] = file.list();
+    return names;
+  } else {
+    // If it's not a directory
+    return null;
+  }
 }

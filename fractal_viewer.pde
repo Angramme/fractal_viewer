@@ -1,6 +1,7 @@
 PShader fract;
 //PShader fxaa;
 String current_fractal;
+String[] all_fractals;
 
 PVector cam_position;
 PMatrix3D cam_rotation;
@@ -25,7 +26,8 @@ void setup() {
   fill(204);
   //fxaa = loadShader("aliasfrag.glsl", "aliasvert.glsl");
   // fract = loadShader("frag.glsl", "vert.glsl");
-  current_fractal = "menger_sponge.glsl";
+  all_fractals = listFileNames(sketchPath()+"/fractals/");
+  current_fractal = all_fractals[0];
   reloadShaders();
     
   cam_position = new PVector(0, 0, -8);
