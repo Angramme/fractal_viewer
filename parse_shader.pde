@@ -28,8 +28,7 @@ String[] load_fragment_shader(String name){
             out_line++;
         }
     }
-
-    print(join(out, '\n'));
+    // print(join(out, '\n'));
 
     return out;
 }
