@@ -67,6 +67,9 @@ void mouseWheel(MouseEvent event) {
 void keyPressed(){
   if(keyCode == 'S' || keyCode=='s')
     reloadShaders();
+  else if(keyCode == 'C' || keyCode=='c')
+    print("taking screenshot");
+    saveFrame("screenshots/screen-"+random(1000000000000L)+".png");
 }
 
 void draw() {
