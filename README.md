@@ -2,9 +2,9 @@
 
 This simple renderer uses GLSL accelerated Ray Marching and a host program written in the Processing language to display fractals.
 
-It can render any fractal which can be defined with a signed function distance (SDF). 
+It can render any fractal which can be defined with a signed distance function (SDF). 
 
-Right now only some fractals defined with IFS are present.
+Right now only some fractals defined with IFS are present by default.
 
 # Gallery
 
