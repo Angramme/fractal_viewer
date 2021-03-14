@@ -35,9 +35,13 @@ You can also download the prebuilt binaries located in releases.
 | drag mouse | rotate the fractal |
 | drag mouse + L | change the light direction |
 | drag mouse + R | rotate the camera |
+| drag mouse + P | change the orientation of the cut plane |
 | scroll | zoom in and out |
-| scroll + I | change number of iterations |
-| scroll + R | change number of reflection bounces |
+| scroll + shift | zoom in and out (slower) |
+| scroll + I | change the number of iterations |
+| scroll + R | change the number of reflection bounces |
+| scroll + P | change the position of the cut plane |
+| scroll + P + shift | change the position of the cut plane (slower) |
 | S | reload shader |
 | C | save screenshot |
 
