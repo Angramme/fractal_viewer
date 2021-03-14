@@ -14,6 +14,9 @@ uniform vec3 light_direction;
 uniform float screen_ratio;
 uniform int reflection_bounces;
 
+uniform float cut_position;
+uniform vec3 cut_direction;
+
 in vec4 vertColor;
 in vec3 vertNormal;
 in vec3 vertLightDir;
@@ -36,9 +39,11 @@ struct PData{
 PData map(vec3 P){
     // vec4 fractal = IFS(P, iterations);
     vec4 fractal = #fractalSDF_name(P, iterations);
+    float cut_plane = dot(cut_direction, P)-cut_position;
 
-
-    return PData(fractal.x, fractal.yzw);
+    return PData(
+        max(fractal.x, -cut_plane), 
+        cut_plane > EPS ? fractal.yzw : .5*vec3(1., .2, .2)+.5*fractal.yzw);
 }
 
 struct MData{
