@@ -47,6 +47,6 @@ You can also download the prebuilt binaries located in releases.
 
 ## Experiment on your own
 
-If you run the code with the Processing environnement, you can modify the shader to change the color and other attributes. Hit the S button on your keyboard once the program is running to reload the shader.
+You can modify the shader to change the color and other attributes. Hit the S button on your keyboard once the program is running to reload the shader.
 
-You can also add your own fractals just by adding another file inside teh fractals folder.
+You can also add your own fractals just by adding another file inside the fractals folder.
