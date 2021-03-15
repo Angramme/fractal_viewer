@@ -6,21 +6,6 @@ It can render any fractal which can be defined with a signed distance function (
 
 Right now only some fractals defined with IFS are present by default.
 
-# Gallery
-
-## Menger Sponge
-
-![menger1](/img/menger1.jpeg)
-![menger2](/img/menger2.png)
-![menger3](/img/menger3.jpeg)
-![menger4](/img/menger4.jpeg)
-
-## Koch Curve
-
-![koch1](/img/koch1.png)
-![koch2](/img/koch2.png)
-![koch3](/img/koch3.png)
-
 ## Running the program
 
 Install Processing if you haven't already and run the program as any other Processing sketch. 
@@ -44,6 +29,28 @@ You can also download the prebuilt binaries located in releases.
 | scroll + P + shift | change the position of the cut plane (slower) |
 | S | reload shader |
 | C | save screenshot |
+
+# Gallery
+
+## Menger Sponge
+
+![menger1](/img/menger1.png)
+![menger2](/img/menger2.png)
+![menger5](/img/menger5.png)
+![menger4](/img/menger4.jpeg)
+
+## Koch Curve
+
+![koch4](/img/koch4.png)
+![koch1](/img/koch1.png)
+![koch2](/img/koch2.png)
+
+## Jerusalem Cube
+
+![jerusalem1](/img/jerusalem1.png)
+![jerusalem2](/img/jerusalem2.png)
+![jerusalem3](/img/jerusalem3.png)
+![jerusalem4](/img/jerusalem4.png)
 
 ## Experiment on your own
 
