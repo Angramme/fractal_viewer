@@ -1,5 +1,7 @@
 # Fractal Viewer!
 
+> This is a prototype! A version written in Rust using gfx-rs along with compute shaders for better performance is eventually planned.
+
 This simple renderer uses GLSL accelerated Ray Marching and a host program written in the Processing language to display fractals.
 
 It can render any fractal which can be defined with a signed distance function (SDF). 
@@ -57,3 +59,4 @@ You can also download the prebuilt binaries located in releases.
 You can modify the shader to change the color and other attributes. Hit the S button on your keyboard once the program is running to reload the shader.
 
 You can also add your own fractals just by adding another file inside the fractals folder.
+
