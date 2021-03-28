@@ -25,21 +25,29 @@ float sdPolyhedron(vec3 p){
     float s2 = 1.;
 
     for(int i=0; i<n; i++){
+        // reduce the size by 2/3
         const float X1 = 2./3;
         s2 *= X1;
         p /= X1;
 
+
+        // which part are we in?
         // if(dot(normalize(p.xz), vec2(-1, 0)) < 0.5){
         // if(abs(p.z) > -p.x*tan(PI/3)){
         if(abs(p.z) > -p.x*1.73205081){
+            // we are in one of the two rotated parts
+            // ...so rotate by 180 degrees
             p.x *= -1;
+            // the left or the right one? ...so rotate accordingly...
             p.xz = (p.z > 0 ? rotm60deg : rot60deg) * p.xz;
         }
+        // rotate by 90 degrees on the x axis
         p.zy = p.yz;
+        // offset the triangle to the side
         p.x += 1.;
-    }
+    } // repeat...
 
-    
+    // calculate the distance...
     float polyhedron = sdPolyhedron(p)*s2;
     return vec4(polyhedron, vec3(.7, 1, .5));
 }
